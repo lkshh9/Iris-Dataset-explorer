@@ -65,9 +65,13 @@ AgGrid(filtered_df, gridOptions=gridOptions, enable_enterprise_modules=True)
 if st.sidebar.checkbox('Show Correlation Heatmap'):
     st.write("Correlation Heatmap")
     fig, ax = plt.subplots()
-    corr = filtered_df.corr()
-    sns.heatmap(corr, annot=True, ax=ax, cmap='coolwarm')
-    st.pyplot(fig)
+    # Check for NaN values before creating heatmap
+    if not filtered_df.empty and not filtered_df.isnull().values.any():
+        corr = filtered_df.corr()
+        sns.heatmap(corr, annot=True, ax=ax, cmap='coolwarm')
+        st.pyplot(fig)
+    else:
+        st.write("Dataset contains NaN values. Handle missing data before displaying heatmap.")
 
 # Pair plot
 if st.sidebar.checkbox('Show Pair Plot'):
